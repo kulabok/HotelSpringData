@@ -44,7 +44,7 @@ public class RequestServiceTest {
     public void setUp() throws Exception {
         em = emf.createEntityManager();
         String start = "14-05-2016";
-        String end = "18-07-2016";
+        String end = "16-06-2016";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date dateStr = formatter.parse(start);
         java.util.Date dateStri = formatter.parse(end);
@@ -70,6 +70,7 @@ public class RequestServiceTest {
         java.util.Date dateStri = formatter.parse(end);
         Request r = new Request();
         User u = new User();
+        u.setFullName("Arthur");
         r.setUser(userService.addUser(u));
         r.setRoomClass(RoomClass.JUNIOR);
         r.setPersonQuantity(1);
@@ -77,8 +78,8 @@ public class RequestServiceTest {
         r.setEnd(new java.sql.Date(dateStri.getTime()));
         requestService.addRequest(r);
         List<Request> requestList = requestService.getAll();
-        requestList.stream().filter(aRequestList -> !Objects.equals(aRequestList.getEnd().toString(), "12.06.2016")).forEach(aRequestList -> {
-            assertTrue(aRequestList.getEnd().toString().equals("19.05.2016"));
+        requestList.stream().filter(aRequestList -> !Objects.equals(aRequestList.getEnd().toString(), "16.06.2016")).forEach(aRequestList -> {
+            assertTrue(aRequestList.getEnd().toString().equals("2016-07-18"));
         });
     }
 
@@ -106,13 +107,27 @@ public class RequestServiceTest {
     @Test
     public void testEditRequest() throws Exception {
         String start = "14-05-2016";
+        String end = "19-06-2016";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date dateStr = formatter.parse(start);
+        java.util.Date dateStri = formatter.parse(end);
         Request r = new Request();
         r.setId(1);
+        User u = new User();
+        u.setFullName("Arthur");
+        r.setUser(userService.addUser(u));
+        r.setRoomClass(RoomClass.JUNIOR);
+        r.setPersonQuantity(1);
         r.setStart(new java.sql.Date(dateStr.getTime()));
+        r.setEnd(new java.sql.Date(dateStri.getTime()));
+        requestService.addRequest(r);
+        System.out.println(requestService.addRequest(r).getId());
+        Request req = requestService.getById(1);
+
+        req.setPersonQuantity(3);
         requestService.editRequest(r);
-        assertFalse(requestService.getById(1).getStart().toString().equals("15.06.2016"));
+        assertFalse(requestService.getById(1).getPersonQuantity() == 1);
+        assertTrue(requestService.getById(1).getPersonQuantity() == 3);
     }
 
     @Test
@@ -122,7 +137,7 @@ public class RequestServiceTest {
     }
 
     @After
-    public void cleanDB(){
+    public void tearDown(){
         List<Request> requestList = requestService.getAll();
         List<User> userList = userService.getAll();
         for (Request aRequestList : requestList) {
