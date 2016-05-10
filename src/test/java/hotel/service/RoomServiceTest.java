@@ -4,6 +4,7 @@ import hotel.config.DataConfig;
 import hotel.entity.Room;
 import hotel.entity.User;
 import hotel.entity.enums.RoomClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class RoomServiceTest {
         em = emf.createEntityManager();
         for (int i = 0; i < 10; i++) {
             Room r = new Room();
-            r.setRoomNumber((int)(Math.random() * (10 * i)));
+            r.setNumber((int)(Math.random() * (10 * i)));
             r.setRoomClass(RoomClass.LUX);
             r.setAvailable(2);
             r.setCostPerPerson(400);
@@ -49,7 +50,7 @@ public class RoomServiceTest {
     @Test
     public void testAddRoom() throws Exception {
         Room r = new Room();
-        r.setRoomNumber((int)(Math.random() * (10 + 2)));
+        r.setNumber((int)(Math.random() * (10 + 2)));
         r.setRoomClass(RoomClass.STANDARD);
         r.setAvailable(2);
         r.setCostPerPerson(200);
@@ -65,21 +66,52 @@ public class RoomServiceTest {
 
     @Test
     public void testDelete() throws Exception {
-
+        List<Room> roomList = roomService.getAll();
+        for (int i = 0; i <roomList.size(); i++) {
+            if (roomService.getByNumber(i) != null) {
+                roomService.delete(i);
+                assertTrue(roomService.getByNumber(i) == null);
+                break;
+            }
+        }
     }
 
     @Test
     public void testGetByNumber() throws Exception {
-
+        List<Room> roomList = roomService.getAll();
+        for (Room aRoomList : roomList) {
+            int k = aRoomList.getNumber();
+            assertTrue(roomService.getByNumber(k) != null);
+        }
     }
 
     @Test
     public void testEditRoom() throws Exception {
-
+        Room r = new Room();
+        r.setNumber(21);
+        r.setRoomClass(RoomClass.STANDARD);
+        r.setPersonsMax(3);
+        r.setAvailable(3);
+        r.setCostPerPerson(555);
+        roomService.addRoom(r);
+        Room room = roomService.getByNumber(21);
+        room.setCostPerPerson(333);
+        roomService.editRoom(room);
+        assertTrue(roomService.getByNumber(21).getCostPerPerson() == 333);
+        assertFalse(roomService.getByNumber(21).getCostPerPerson() == 555);
     }
 
     @Test
     public void testGetAll() throws Exception {
+        List<Room> roomsList = roomService.getAll();
+        assertTrue(roomsList.size()>0);
+    }
 
+    @After
+    public void tearDown(){
+        List<Room> userList = roomService.getAll();
+        for (Room aRoomList : userList) {
+            roomService.delete(aRoomList.getNumber());
+        }
     }
 }

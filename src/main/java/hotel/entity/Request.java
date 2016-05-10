@@ -21,6 +21,7 @@ public class Request {
     @JoinColumn (name = "client_id")
     private User user;
     @Column (name = "roomclass", nullable = false)
+    @Enumerated(EnumType.STRING)
     private RoomClass roomClass;
     @Column (name = "personsquantity", nullable = false)
     private int personQuantity;

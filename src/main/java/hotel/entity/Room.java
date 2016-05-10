@@ -1,11 +1,9 @@
 package hotel.entity;
 
 import hotel.entity.enums.RoomClass;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by kulabok on 06.05.2016.
@@ -14,9 +12,10 @@ import javax.persistence.Table;
 @Table (name = "room")
 public class Room {
     @Id
-    @Column(name = "number", length = 3, nullable = false)
-    private int roomNumber;
+    @Column (name = "number", nullable = false)
+    private int number;
     @Column (name = "roomclass", nullable = false)
+    @Enumerated(EnumType.STRING)
     private RoomClass roomClass;
     @Column (name = "personsmax", nullable = false)
     private int personsMax;
@@ -25,12 +24,12 @@ public class Room {
     @Column (name = "available", nullable = false)
     private int available;
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public int getNumber() {
+        return number;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public RoomClass getRoomClass() {

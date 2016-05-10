@@ -17,7 +17,7 @@ public class Bill {
     @ManyToOne
     @JoinColumn (name = "request_id")
     private Request request;
-    @ManyToOne
+    @OneToOne
     @JoinColumn (name = "roomnumber")
     private Room room;
     @Column (name = "cost", nullable = false)
