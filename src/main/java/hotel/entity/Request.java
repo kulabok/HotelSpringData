@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -25,10 +26,12 @@ public class Request {
     private RoomClass roomClass;
     @Column (name = "personsquantity", nullable = false)
     private int personQuantity;
+    @Temporal(TemporalType.DATE)
     @Column (name = "start", nullable = false)
-    private java.sql.Date start;
+    private Date start;
+    @Temporal(TemporalType.DATE)
     @Column (name = "end", nullable = false)
-    private java.sql.Date end;
+    private Date end;
 
     public int getId() {
         return id;
@@ -62,19 +65,19 @@ public class Request {
         this.personQuantity = personQuantity;
     }
 
-    public java.sql.Date getStart() {
-        return start;
-    }
-
-    public void setStart(java.sql.Date start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public java.sql.Date getEnd() {
-        return end;
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
-    public void setEnd(java.sql.Date end) {
-        this.end = end;
+    public Date getStart() {
+        return start;
+    }
+
+    public Date getEnd() {
+        return end;
     }
 }

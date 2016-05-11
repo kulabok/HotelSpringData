@@ -19,6 +19,7 @@ import javax.persistence.EntityManagerFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,14 +30,11 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = DataConfig.class)
 @WebAppConfiguration
 public class RequestServiceTest {
-
     @Resource
     private EntityManagerFactory emf;
     protected EntityManager em;
-
     @Resource
     private RequestService requestService;
-
     @Resource
     private UserService userService;
 
@@ -46,8 +44,8 @@ public class RequestServiceTest {
         String start = "14-05-2016";
         String end = "16-06-2016";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        java.util.Date dateStr = formatter.parse(start);
-        java.util.Date dateStri = formatter.parse(end);
+        Date dateStr = formatter.parse(start);
+        Date dateStri = formatter.parse(end);
         for (int i = 0; i < 10; i++) {
             Request r = new Request();
             User u = new User();
@@ -55,8 +53,8 @@ public class RequestServiceTest {
             r.setUser(userService.addUser(u));
             r.setRoomClass(RoomClass.STANDARD);
             r.setPersonQuantity(2);
-            r.setStart(new java.sql.Date(dateStr.getTime()));
-            r.setEnd(new java.sql.Date(dateStri.getTime()));
+            r.setStart(new Date(dateStr.getTime()));
+            r.setEnd(new Date(dateStri.getTime()));
             requestService.addRequest(r);
         }
     }
@@ -78,9 +76,11 @@ public class RequestServiceTest {
         r.setEnd(new java.sql.Date(dateStri.getTime()));
         requestService.addRequest(r);
         List<Request> requestList = requestService.getAll();
-        requestList.stream().filter(aRequestList -> !Objects.equals(aRequestList.getEnd().toString(), "16.06.2016")).forEach(aRequestList -> {
-            assertTrue(aRequestList.getEnd().toString().equals("2016-07-18"));
-        });
+        for (int i = 0; i < requestList.size(); i++) {
+            if (!requestList.get(i).getEnd().toString().equals("2016-06-16")){
+                assertTrue(requestList.get(i).getEnd().toString().equals("2016-07-18"));
+            }
+        }
     }
 
     @Test
@@ -106,28 +106,23 @@ public class RequestServiceTest {
 
     @Test
     public void testEditRequest() throws Exception {
-        String start = "14-05-2016";
-        String end = "19-06-2016";
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        java.util.Date dateStr = formatter.parse(start);
-        java.util.Date dateStri = formatter.parse(end);
-        Request r = new Request();
-        r.setId(1);
-        User u = new User();
-        u.setFullName("Arthur");
-        r.setUser(userService.addUser(u));
-        r.setRoomClass(RoomClass.JUNIOR);
-        r.setPersonQuantity(1);
-        r.setStart(new java.sql.Date(dateStr.getTime()));
-        r.setEnd(new java.sql.Date(dateStri.getTime()));
-        requestService.addRequest(r);
-        System.out.println(requestService.addRequest(r).getId());
-        Request req = requestService.getById(1);
+        List<Request> reqList = requestService.getAll();
+        for (int i = 0; i < reqList.size(); i++) {
+            if (reqList.get(i)!=null){
+                Request req = reqList.get(i);
+                req.setRoomClass(RoomClass.JUNIOR);
+                req.setPersonQuantity(25);
+                requestService.editRequest(req);
+                break;
+            }
+        }
+        reqList = requestService.getAll();
+        for (int i = 0; i < reqList.size(); i++) {
+            if (reqList.get(i).getPersonQuantity()==25){
+                assertTrue(reqList.get(i).getRoomClass().toString().equals("JUNIOR"));
+            }
+        }
 
-        req.setPersonQuantity(3);
-        requestService.editRequest(r);
-        assertFalse(requestService.getById(1).getPersonQuantity() == 1);
-        assertTrue(requestService.getById(1).getPersonQuantity() == 3);
     }
 
     @Test
