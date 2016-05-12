@@ -32,6 +32,8 @@ public class Request {
     @Temporal(TemporalType.DATE)
     @Column (name = "end", nullable = false)
     private Date end;
+    @Column (name = "processed", nullable = false)
+    private boolean isProcessed;
 
     public int getId() {
         return id;
@@ -79,5 +81,13 @@ public class Request {
 
     public Date getEnd() {
         return end;
+    }
+
+    public boolean isProcessed() {
+        return isProcessed;
+    }
+
+    public void setProcessed(boolean isProcessed) {
+        this.isProcessed = isProcessed;
     }
 }

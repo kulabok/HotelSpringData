@@ -4,6 +4,8 @@ import hotel.entity.User;
 import hotel.repository.UserRepository;
 import hotel.service.dao.UserServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,11 @@ import java.util.List;
 public class UserServiceDaoImpl implements UserServiceDao {
     @Autowired
     private UserRepository userRepository;
+
+    public User isExist(String login, String password){
+        User user = userRepository.isExist(login, password);
+        return user;
+    }
 
     @Override
     public User addUser(User user) {

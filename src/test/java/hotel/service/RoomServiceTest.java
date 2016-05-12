@@ -4,6 +4,7 @@ import hotel.config.DataConfig;
 import hotel.entity.Room;
 import hotel.entity.User;
 import hotel.entity.enums.RoomClass;
+import hotel.service.dao.RoomServiceDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class RoomServiceTest {
     protected EntityManager em;
 
     @Resource
-    private RoomService roomService;
+    private RoomServiceDao roomService;
 
     @Before
     public void setUp() throws Exception {

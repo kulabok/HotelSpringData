@@ -4,6 +4,8 @@ import hotel.config.DataConfig;
 import hotel.entity.Request;
 import hotel.entity.User;
 import hotel.entity.enums.RoomClass;
+import hotel.service.dao.RequestServiceDao;
+import hotel.service.dao.UserServiceDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,9 +36,9 @@ public class RequestServiceTest {
     private EntityManagerFactory emf;
     protected EntityManager em;
     @Resource
-    private RequestService requestService;
+    private RequestServiceDao requestService;
     @Resource
-    private UserService userService;
+    private UserServiceDao userService;
 
     @Before
     public void setUp() throws Exception {
@@ -49,6 +51,8 @@ public class RequestServiceTest {
         for (int i = 0; i < 10; i++) {
             Request r = new Request();
             User u = new User();
+            u.setLogin("login");
+            u.setPassword("password");
             u.setFullName("Robert");
             r.setUser(userService.addUser(u));
             r.setRoomClass(RoomClass.STANDARD);
@@ -69,6 +73,8 @@ public class RequestServiceTest {
         Request r = new Request();
         User u = new User();
         u.setFullName("Arthur");
+        u.setLogin("login");
+        u.setPassword("password");
         r.setUser(userService.addUser(u));
         r.setRoomClass(RoomClass.JUNIOR);
         r.setPersonQuantity(1);

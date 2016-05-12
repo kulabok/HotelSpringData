@@ -6,6 +6,10 @@ import hotel.entity.Request;
 import hotel.entity.Room;
 import hotel.entity.User;
 import hotel.entity.enums.RoomClass;
+import hotel.service.dao.BillServiceDao;
+import hotel.service.dao.RequestServiceDao;
+import hotel.service.dao.RoomServiceDao;
+import hotel.service.dao.UserServiceDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,13 +37,13 @@ public class BillServiceTest {
     private EntityManagerFactory emf;
     protected EntityManager em;
     @Resource
-    private RequestService requestService;
+    private RequestServiceDao requestService;
     @Resource
-    private UserService userService;
+    private UserServiceDao userService;
     @Resource
-    private RoomService roomService;
+    private RoomServiceDao roomService;
     @Resource
-    private BillService billService;
+    private BillServiceDao billService;
 
     public void setUp() throws Exception {
         em = emf.createEntityManager();
@@ -56,6 +60,8 @@ public class BillServiceTest {
             r.setPersonQuantity(2);
             User u = new User();
             u.setFullName("Andrew");
+            u.setLogin("login");
+            u.setPassword("password");
             r.setUser(userService.addUser(u));
             r.setStart(new Date(dateStr.getTime()));
             r.setEnd(new Date(dateStri.getTime()));
@@ -83,6 +89,8 @@ public class BillServiceTest {
         r.setRoomClass(RoomClass.LUX);
         r.setPersonQuantity(12);
         User u = new User();
+        u.setLogin("login");
+        u.setPassword("password");
         u.setFullName("Jack Sparrow");
         r.setUser(userService.addUser(u));
         r.setStart(new Date(dateStr.getTime()));
@@ -144,6 +152,8 @@ public class BillServiceTest {
             r.setRoomClass(RoomClass.LUX);
             r.setPersonQuantity(2);
             User u = new User();
+            u.setLogin("login");
+            u.setPassword("password");
             u.setFullName("Andrew");
             r.setUser(userService.addUser(u));
             r.setStart(new Date(dateStr.getTime()));

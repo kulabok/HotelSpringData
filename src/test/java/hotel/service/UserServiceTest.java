@@ -4,6 +4,7 @@ import hotel.config.DataConfig;
 import hotel.entity.User;
 
 import hotel.repository.UserRepository;
+import hotel.service.dao.UserServiceDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,24 +35,39 @@ public class UserServiceTest {
     protected EntityManager em;
 
     @Resource
-    private UserService userService;
+    private UserServiceDao userService;
 
     @Before
     public void setUp() throws Exception {
         em = emf.createEntityManager();
         for (int i = 0; i < 10; i++) {
             User u = new User();
+            u.setLogin("login");
+            u.setPassword("password");
             u.setFullName("Peter Pan");
             userService.addUser(u);
         }
     }
 
     @Test
+    public void testIsExist() throws Exception {
+        User u = new User();
+        u.setFullName("Chuck Norris");
+        u.setLogin("Chuck");
+        u.setPassword("Norris");
+        u.setAdmin(false);
+        userService.addUser(u);
+        assertTrue(userService.isExist("Chuck", "Norris" ) != null);
+    }
+
+    @Test
     public void testAddUser() throws Exception {
-            User u = new User();
-            u.setFullName("Chuck Norris");
-            u.setAdmin(false);
-            userService.addUser(u);
+        User u = new User();
+        u.setFullName("Chuck Norris");
+        u.setLogin("login");
+        u.setPassword("password");
+        u.setAdmin(false);
+        userService.addUser(u);
         List<User> userList = userService.getAll();
         for (User anUserList : userList) {
             if (!Objects.equals(anUserList.getFullName(), "Peter Pan")) {
@@ -79,6 +95,8 @@ public class UserServiceTest {
     public void testEditUser() throws Exception {
         User u = new User();
         u.setId(1);
+        u.setLogin("login");
+        u.setPassword("password");
         u.setFullName("Arnold");
         userService.editUser(u);
         assertFalse(userService.getById(1).getFullName().equals("Peter Pan"));
