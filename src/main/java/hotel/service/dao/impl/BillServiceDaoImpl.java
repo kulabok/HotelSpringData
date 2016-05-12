@@ -1,22 +1,18 @@
-package hotel.service.impl;
+package hotel.service.dao.impl;
 
-import com.mysql.jdbc.ConnectionGroupManager;
-import com.mysql.jdbc.ConnectionImpl;
 import hotel.repository.BillRepository;
-import hotel.service.BillService;
+import hotel.service.dao.BillServiceDao;
 import hotel.entity.Bill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.sql.ConnectionPoolDataSource;
-import java.sql.Connection;
 import java.util.List;
 
 /**
  * Created by kulabok on 06.05.2016.
  */
 @Service
-public class BillServiceImpl implements BillService {
+public class BillServiceDaoImpl implements BillServiceDao {
     @Autowired
     private BillRepository billRepository;
 
