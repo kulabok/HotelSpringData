@@ -1,8 +1,8 @@
-package hotel.service.impl;
+package hotel.service.dao.impl;
 
 import hotel.entity.User;
 import hotel.repository.UserRepository;
-import hotel.service.UserService;
+import hotel.service.dao.UserServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * Created by kulabok on 06.05.2016.
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceDaoImpl implements UserServiceDao {
     @Autowired
     private UserRepository userRepository;
 
